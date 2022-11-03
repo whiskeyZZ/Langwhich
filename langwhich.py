@@ -4,7 +4,9 @@ from googletrans import Translator
 import random
 from tkinter import *
 from random import shuffle
-import save_stuff
+from save_stuff import Prop as prop
+import time
+
 
 
 def choose_lang():
@@ -27,7 +29,7 @@ def translate_word(keys, languages):
         lang_entry.append(languages[x])
         lang_entry.append(words_to_translate[x])
         information_lang.append(lang_entry)
-    start_level()
+    start_level(0)
 
 def get_words():
     with open("words.txt") as file:
@@ -39,24 +41,49 @@ def get_words():
         words_to_translate.append(lines[i])
     return words_to_translate
 
-def start_level():
-    actual_lang = information_lang[save_stuff.Prop.get_counter(save_stuff.Prop)][1]
-    actual_word = information_lang[save_stuff.Prop.get_counter(save_stuff.Prop)][0]
+def start_level(button_number):
+    if prop.not_first_level:
+        check_correct(button_number)
+
+    prop.actual_lang = information_lang[prop.level_counter][1]
+    actual_word = information_lang[prop.level_counter][0]
     actual_word_canvas.itemconfig(word, text=actual_word+ " ?")
     button_langs = []
     shuffle(lang_names)
     button_langs.append(lang_names[0])
     button_langs.append(lang_names[1])
-    button_langs.append(actual_lang)
+    button_langs.append(prop.actual_lang)
     shuffle(button_langs)
-    save_stuff.Prop.set_one_lang(save_stuff.Prop , button_langs[0])
-    save_stuff.Prop.set_two_lang(save_stuff.Prop, button_langs[1])
-    save_stuff.Prop.set_three_lang(save_stuff.Prop, button_langs[2])
-    save_stuff.Prop.add_to_counter(save_stuff.Prop)
-    button_one.config(text=save_stuff.Prop.get_one_lang(save_stuff.Prop))
-    button_two.config(text=save_stuff.Prop.get_two_lang(save_stuff.Prop))
-    button_three.config(text=save_stuff.Prop.get_three_lang(save_stuff.Prop))
-    print(save_stuff.Prop.get_counter(save_stuff.Prop))
+    prop.button_one_lang = button_langs[0]
+    prop.button_two_lang = button_langs[1]
+    prop.button_three_lang = button_langs[2]
+    prop.level_counter += 1
+    button_one.config(text=prop.button_one_lang)
+    button_two.config(text=prop.button_two_lang)
+    button_three.config(text=prop.button_three_lang)
+    prop.not_first_level = True
+
+
+def check_correct(button_number):
+    print(prop.actual_lang)
+    if prop.button_one_lang == prop.actual_lang:
+        button_one.config(foreground="#37d629", activeforeground="#37d629")
+        if button_number == 1:
+            prop.points += 1
+    if prop.button_two_lang == prop.actual_lang:
+        button_two.config(foreground="#37d629", activeforeground="#37d629")
+        if button_number == 2:
+            prop.points += 1
+    if prop.button_three_lang == prop.actual_lang:
+        button_three.config(foreground="#37d629", activeforeground="#37d629")
+        if button_number == 3:
+            prop.points += 1
+    root.update()
+    time.sleep(1)
+    button_one.config(foreground="#226660", activeforeground="#226660")
+    button_two.config(foreground="#226660", activeforeground="#226660")
+    button_three.config(foreground="#226660", activeforeground="#226660")
+
 
 
 translator = Translator()
@@ -71,6 +98,9 @@ information_lang = []
 bg_color = "#081413"
 text_color = "#226660"
 
+
+
+
 root = Tk()
 root.title("Langwhich")
 root.configure(bg=bg_color)
@@ -84,11 +114,11 @@ actual_word_canvas = Canvas(root, bg=bg_color, width=800, height=120, highlightt
 word = actual_word_canvas.create_text(400, 70, font=("Helvetica", 80, "bold"), fill="blue")
 actual_word_canvas.pack()
 
-button_one = Button(root, command=lambda : start_level(), background=bg_color, activebackground=bg_color, foreground=text_color, activeforeground=text_color, font=("Helvetica", 60), highlightthickness=0, bd=0)
+button_one = Button(root, command=lambda : start_level(1), background=bg_color, activebackground=bg_color, foreground=prop.text_color_one, activeforeground=prop.text_color_one, font=("Helvetica", 60), highlightthickness=0, bd=0)
 button_one.pack()
-button_two = Button(root, command=lambda : start_level(), background=bg_color, activebackground=bg_color, foreground=text_color, activeforeground=text_color, font=("Helvetica", 60), highlightthickness=0, bd=0)
+button_two = Button(root, command=lambda : start_level(2), background=bg_color, activebackground=bg_color, foreground=prop.text_color_two, activeforeground=prop.text_color_two, font=("Helvetica", 60), highlightthickness=0, bd=0)
 button_two.pack()
-button_three = Button(root, command=lambda : start_level(), background=bg_color, activebackground=bg_color, foreground=text_color, activeforeground=text_color, font=("Helvetica", 60), highlightthickness=0, bd=0)
+button_three = Button(root, command=lambda : start_level(3), background=bg_color, activebackground=bg_color, foreground=prop.text_color_three, activeforeground=prop.text_color_three, font=("Helvetica", 60), highlightthickness=0, bd=0)
 button_three.pack()
 
 choose_lang()

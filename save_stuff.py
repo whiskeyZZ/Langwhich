@@ -1,30 +1,14 @@
 class Prop:
     level_counter = 0
+    points = 0
     button_one_lang = ""
     button_two_lang = ""
     button_three_lang = ""
+    actual_lang = ""
+    not_first_level = False
 
-    def get_counter(self):
-        return self.level_counter
+    text_color_one = "#226660"
+    text_color_two = "#226660"
+    text_color_three = "#226660"
 
-    def add_to_counter(self):
-        self.level_counter += 1
-
-    def set_one_lang(self, lang):
-        self.button_one_lang = lang
-    
-    def set_two_lang(self, lang):
-        self.button_two_lang = lang
-
-    def set_three_lang(self, lang):
-        self.button_three_lang = lang
-
-    def get_one_lang(self):
-        return self.button_one_lang
-
-    def get_two_lang(self):
-        return self.button_two_lang
-
-    def get_three_lang(self):
-        return self.button_three_lang
 
