@@ -49,7 +49,7 @@ def start_level(button_number):
     elif prop.correct_language:
         check_guesses_word(button_number)
     
-    if prop.jump == False:
+    if prop.jump == False and prop.level_counter < 5:
         prop.actual_lang = information_lang[prop.level_counter][1]
         actual_word = information_lang[prop.level_counter][0]
         actual_word_canvas.itemconfig(word, text=actual_word+ " ?")
@@ -60,6 +60,8 @@ def start_level(button_number):
         button_langs.append(lang_names[1])
         button_langs.append(prop.actual_lang)
         shuffle(button_langs)
+        print(button_langs)
+        print(prop.actual_lang)
         prop.button_one_lang = button_langs[0]
         prop.button_two_lang = button_langs[1]
         prop.button_three_lang = button_langs[2]
@@ -68,6 +70,13 @@ def start_level(button_number):
         button_two.config(text=prop.button_two_lang)
         button_three.config(text=prop.button_three_lang)
         prop.not_first_level = True
+
+    if prop.level_counter == 5:
+        button_one.pack_forget()
+        button_two.pack_forget()
+        button_three.pack_forget()
+        question_canvas.itemconfig(question, text="Your score")
+        actual_word_canvas.itemconfig(word, text=str(prop.points))
 
 def guess_word():
     question_canvas.itemconfig(question, text="What means")
@@ -110,6 +119,7 @@ def check_guesses_word(button_number):
     button_two.config(foreground="#226660", activeforeground="#226660")
     button_three.config(foreground="#226660", activeforeground="#226660")
     prop.jump = False
+    prop.correct_language = False
 
 
 def check_correct(button_number):
