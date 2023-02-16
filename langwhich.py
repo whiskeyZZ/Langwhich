@@ -29,6 +29,7 @@ def translate_word(keys, languages):
         lang_entry.append(languages[x])
         lang_entry.append(words_to_translate[x])
         information_lang.append(lang_entry)
+        print(lang_entry)
     start_level(0)
 
 def get_words():
@@ -42,47 +43,101 @@ def get_words():
     return words_to_translate
 
 def start_level(button_number):
-    if prop.not_first_level:
+    if prop.not_first_level and prop.correct_language == False:
         check_correct(button_number)
 
-    prop.actual_lang = information_lang[prop.level_counter][1]
-    actual_word = information_lang[prop.level_counter][0]
-    actual_word_canvas.itemconfig(word, text=actual_word+ " ?")
-    button_langs = []
-    shuffle(lang_names)
-    button_langs.append(lang_names[0])
-    button_langs.append(lang_names[1])
-    button_langs.append(prop.actual_lang)
-    shuffle(button_langs)
-    prop.button_one_lang = button_langs[0]
-    prop.button_two_lang = button_langs[1]
-    prop.button_three_lang = button_langs[2]
-    prop.level_counter += 1
-    button_one.config(text=prop.button_one_lang)
-    button_two.config(text=prop.button_two_lang)
-    button_three.config(text=prop.button_three_lang)
-    prop.not_first_level = True
+    elif prop.correct_language:
+        check_guesses_word(button_number)
+    
+    if prop.jump == False:
+        prop.actual_lang = information_lang[prop.level_counter][1]
+        actual_word = information_lang[prop.level_counter][0]
+        actual_word_canvas.itemconfig(word, text=actual_word+ " ?")
+        question_canvas.itemconfig(question, text="From which language is")
+        button_langs = []
+        shuffle(lang_names)
+        button_langs.append(lang_names[0])
+        button_langs.append(lang_names[1])
+        button_langs.append(prop.actual_lang)
+        shuffle(button_langs)
+        prop.button_one_lang = button_langs[0]
+        prop.button_two_lang = button_langs[1]
+        prop.button_three_lang = button_langs[2]
+        prop.level_counter += 1
+        button_one.config(text=prop.button_one_lang)
+        button_two.config(text=prop.button_two_lang)
+        button_three.config(text=prop.button_three_lang)
+        prop.not_first_level = True
 
+def guess_word():
+    question_canvas.itemconfig(question, text="What means")
+    words = []
+    prop.actual_word = information_lang[prop.level_counter-1][2]
+    with open("words.txt") as file:
+        lines = file.readlines()
+        lines = [line.rstrip() for line in lines]
+    shuffle(lines)
+    words.append(prop.actual_word)
+    words.append(lines[0])
+    words.append(lines[1])
+    shuffle(words)
+    print(words)
+    prop.button_one_word = words[0]
+    prop.button_two_word = words[1]
+    prop.button_three_word = words[2]
+    button_one.config(text=prop.button_one_word)
+    button_two.config(text=prop.button_two_word)
+    button_three.config(text=prop.button_three_word)
+    prop.jump = True
 
-def check_correct(button_number):
-    print(prop.actual_lang)
-    if prop.button_one_lang == prop.actual_lang:
+def check_guesses_word(button_number):
+    if prop.button_one_word == prop.actual_word:
         button_one.config(foreground="#37d629", activeforeground="#37d629")
         if button_number == 1:
             prop.points += 1
-    if prop.button_two_lang == prop.actual_lang:
+    if prop.button_two_word == prop.actual_word:
         button_two.config(foreground="#37d629", activeforeground="#37d629")
         if button_number == 2:
             prop.points += 1
-    if prop.button_three_lang == prop.actual_lang:
+    if prop.button_three_word == prop.actual_word:
         button_three.config(foreground="#37d629", activeforeground="#37d629")
         if button_number == 3:
             prop.points += 1
+    print(prop.points)
     root.update()
     time.sleep(1)
     button_one.config(foreground="#226660", activeforeground="#226660")
     button_two.config(foreground="#226660", activeforeground="#226660")
     button_three.config(foreground="#226660", activeforeground="#226660")
+    prop.jump = False
+
+
+def check_correct(button_number):
+    prop.correct_language = False
+    print(prop.actual_lang)
+    if prop.button_one_lang == prop.actual_lang:
+        button_one.config(foreground="#37d629", activeforeground="#37d629")
+        if button_number == 1:
+            prop.points += 1
+            prop.correct_language = True
+    if prop.button_two_lang == prop.actual_lang:
+        button_two.config(foreground="#37d629", activeforeground="#37d629")
+        if button_number == 2:
+            prop.points += 1
+            prop.correct_language = True
+    if prop.button_three_lang == prop.actual_lang:
+        button_three.config(foreground="#37d629", activeforeground="#37d629")
+        if button_number == 3:
+            prop.points += 1
+            prop.correct_language = True
+    print(prop.points)
+    root.update()
+    time.sleep(1)
+    button_one.config(foreground="#226660", activeforeground="#226660")
+    button_two.config(foreground="#226660", activeforeground="#226660")
+    button_three.config(foreground="#226660", activeforeground="#226660")
+    if prop.correct_language:
+        guess_word()
 
 
 
@@ -107,7 +162,7 @@ root.configure(bg=bg_color)
 canvas = Canvas(root, width=1000, height=800)
 
 question_canvas = Canvas(root, bg=bg_color, width=800, height=100, highlightthickness=0)
-question_canvas.create_text(400, 50, text="From which Language is", font=("Helvetica", 50), fill=text_color)
+question = question_canvas.create_text(400, 50, text="From which Language is", font=("Helvetica", 50), fill=text_color)
 question_canvas.pack()
 
 actual_word_canvas = Canvas(root, bg=bg_color, width=800, height=120, highlightthickness=0)
