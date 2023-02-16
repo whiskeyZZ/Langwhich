@@ -8,7 +8,6 @@ from save_stuff import Prop as prop
 import time
 
 
-
 def choose_lang():
     keys = []
     languages = []
@@ -29,7 +28,6 @@ def translate_word(keys, languages):
         lang_entry.append(languages[x])
         lang_entry.append(words_to_translate[x])
         information_lang.append(lang_entry)
-        print(lang_entry)
     start_level(0)
 
 def get_words():
@@ -60,8 +58,6 @@ def start_level(button_number):
         button_langs.append(lang_names[1])
         button_langs.append(prop.actual_lang)
         shuffle(button_langs)
-        print(button_langs)
-        print(prop.actual_lang)
         prop.button_one_lang = button_langs[0]
         prop.button_two_lang = button_langs[1]
         prop.button_three_lang = button_langs[2]
@@ -90,7 +86,6 @@ def guess_word():
     words.append(lines[0])
     words.append(lines[1])
     shuffle(words)
-    print(words)
     prop.button_one_word = words[0]
     prop.button_two_word = words[1]
     prop.button_three_word = words[2]
@@ -112,7 +107,6 @@ def check_guesses_word(button_number):
         button_three.config(foreground="#37d629", activeforeground="#37d629")
         if button_number == 3:
             prop.points += 1
-    print(prop.points)
     root.update()
     time.sleep(1)
     button_one.config(foreground="#226660", activeforeground="#226660")
@@ -121,10 +115,8 @@ def check_guesses_word(button_number):
     prop.jump = False
     prop.correct_language = False
 
-
 def check_correct(button_number):
     prop.correct_language = False
-    print(prop.actual_lang)
     if prop.button_one_lang == prop.actual_lang:
         button_one.config(foreground="#37d629", activeforeground="#37d629")
         if button_number == 1:
@@ -140,7 +132,6 @@ def check_correct(button_number):
         if button_number == 3:
             prop.points += 1
             prop.correct_language = True
-    print(prop.points)
     root.update()
     time.sleep(1)
     button_one.config(foreground="#226660", activeforeground="#226660")
@@ -162,8 +153,6 @@ information_lang = []
 
 bg_color = "#081413"
 text_color = "#226660"
-
-
 
 
 root = Tk()
