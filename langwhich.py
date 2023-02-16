@@ -11,7 +11,7 @@ import time
 def choose_lang():
     keys = []
     languages = []
-    for i in range(5):
+    for i in range(10):
         rnd = random.randint(0, len(lang_keys)-1)
         keys.append(lang_keys[rnd])
         languages.append(lang_names[rnd])
@@ -20,7 +20,7 @@ def choose_lang():
 
 def translate_word(keys, languages):
     words_to_translate = get_words()
-    for x in range(5):
+    for x in range(10):
         lang_entry = []
         used_key = keys[x]
         new_trans = translator.translate(words_to_translate[x], dest=used_key)
@@ -36,7 +36,7 @@ def get_words():
         lines = [line.rstrip() for line in lines]
     shuffle(lines)
     words_to_translate = []
-    for i in range(5):
+    for i in range(10):
         words_to_translate.append(lines[i])
     return words_to_translate
 
@@ -47,7 +47,7 @@ def start_level(button_number):
     elif prop.correct_language:
         check_guesses_word(button_number)
     
-    if prop.jump == False and prop.level_counter < 5:
+    if prop.jump == False and prop.level_counter < 10:
         prop.actual_lang = information_lang[prop.level_counter][1]
         actual_word = information_lang[prop.level_counter][0]
         actual_word_canvas.itemconfig(word, text=actual_word+ " ?")
@@ -67,7 +67,7 @@ def start_level(button_number):
         button_three.config(text=prop.button_three_lang)
         prop.not_first_level = True
 
-    if prop.level_counter == 5:
+    if prop.level_counter == 10:
         button_one.pack_forget()
         button_two.pack_forget()
         button_three.pack_forget()
