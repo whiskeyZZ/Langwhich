@@ -6,6 +6,7 @@ from tkinter import *
 from random import shuffle
 from save_stuff import Prop as prop
 import time
+import json
 
 
 def choose_lang():
@@ -73,6 +74,23 @@ def start_level(button_number):
         button_three.pack_forget()
         question_canvas.itemconfig(question, text="Your score")
         actual_word_canvas.itemconfig(word, text=str(prop.points))
+        with open("highscore.json") as hs:
+            highscore_dict = json.loads(hs.read())
+            hs.close()
+        highscr = highscore_dict["highscore"]
+        actaul_hs = 0
+        if highscr < prop.points:
+            actaul_hs = prop.points
+            highscore_dict["highscore"] = prop.points
+            js = json.dumps(highscore_dict)
+            f = open("highscore.json", "w")
+            f.write(js)
+        else:
+            actaul_hs = highscr
+        highscore_canvas = Canvas(root, bg=bg_color, width=800, height=100, highlightthickness=0)
+        highscore_canvas.create_text(400, 50, text="Highscore", font=("Helvetica", 50), fill=text_color)
+        actual_hs_canvas = Canvas(root, bg=bg_color, width=800, height=120, highlightthickness=0)
+        actual_hs_canvas.create_text(400, 70, font=("Helvetica", 80, "bold"), fill="blue", text=str(actaul_hs))
         button_restart.config(text="Restart")
         button_restart.pack()
 
@@ -157,9 +175,6 @@ translator = Translator()
 lang_dict = (googletrans.LANGUAGES)
 lang_keys = list(lang_dict.keys())
 lang_names = list(lang_dict.values())
-#actual_lang = ""
-#actual_level = 0
-#information_lang = []
 
 bg_color = "#081413"
 text_color = "#226660"
