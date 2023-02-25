@@ -27,7 +27,7 @@ def translate_word(keys, languages):
         lang_entry.append(new_trans.text)
         lang_entry.append(languages[x])
         lang_entry.append(words_to_translate[x])
-        information_lang.append(lang_entry)
+        prop.information_lang.append(lang_entry)
     start_level(0)
 
 def get_words():
@@ -48,8 +48,8 @@ def start_level(button_number):
         check_guesses_word(button_number)
     
     if prop.jump == False and prop.level_counter < 10:
-        prop.actual_lang = information_lang[prop.level_counter][1]
-        actual_word = information_lang[prop.level_counter][0]
+        prop.actual_lang = prop.information_lang[prop.level_counter][1]
+        actual_word = prop.information_lang[prop.level_counter][0]
         actual_word_canvas.itemconfig(word, text=actual_word+ " ?")
         question_canvas.itemconfig(question, text="From which language is")
         button_langs = []
@@ -73,11 +73,13 @@ def start_level(button_number):
         button_three.pack_forget()
         question_canvas.itemconfig(question, text="Your score")
         actual_word_canvas.itemconfig(word, text=str(prop.points))
+        button_restart.config(text="Restart")
+        button_restart.pack()
 
 def guess_word():
     question_canvas.itemconfig(question, text="What means")
     words = []
-    prop.actual_word = information_lang[prop.level_counter-1][2]
+    prop.actual_word = prop.information_lang[prop.level_counter-1][2]
     with open("words.txt") as file:
         lines = file.readlines()
         lines = [line.rstrip() for line in lines]
@@ -140,6 +142,14 @@ def check_correct(button_number):
     if prop.correct_language:
         guess_word()
 
+def restart():
+    button_restart.pack_forget()
+    question_canvas.itemconfig(question, text="From which Language is")
+    button_one.pack()
+    button_two.pack()
+    button_three.pack()
+    prop.reset_prop(prop)
+    choose_lang()
 
 
 translator = Translator()
@@ -147,9 +157,9 @@ translator = Translator()
 lang_dict = (googletrans.LANGUAGES)
 lang_keys = list(lang_dict.keys())
 lang_names = list(lang_dict.values())
-actual_lang = ""
-actual_level = 0
-information_lang = []
+#actual_lang = ""
+#actual_level = 0
+#information_lang = []
 
 bg_color = "#081413"
 text_color = "#226660"
@@ -174,6 +184,7 @@ button_two = Button(root, command=lambda : start_level(2), background=bg_color, 
 button_two.pack()
 button_three = Button(root, command=lambda : start_level(3), background=bg_color, activebackground=bg_color, foreground=prop.text_color_three, activeforeground=prop.text_color_three, font=("Helvetica", 60), highlightthickness=0, bd=0)
 button_three.pack()
+button_restart = Button(root, command=lambda : restart(), background=bg_color, activebackground=bg_color, foreground=prop.text_color_three, activeforeground=prop.text_color_three, font=("Helvetica", 60), highlightthickness=0, bd=0)
 
 choose_lang()
 root.mainloop()
