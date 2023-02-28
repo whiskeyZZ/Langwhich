@@ -29,6 +29,7 @@ def translate_word(keys, languages):
         lang_entry.append(languages[x])
         lang_entry.append(words_to_translate[x])
         prop.information_lang.append(lang_entry)
+    print(prop.information_lang)
     start_level(0)
 
 def get_words():
@@ -54,9 +55,10 @@ def start_level(button_number):
         actual_word_canvas.itemconfig(word, text=actual_word+ " ?")
         question_canvas.itemconfig(question, text="From which language is")
         button_langs = []
-        shuffle(lang_names)
-        button_langs.append(lang_names[0])
-        button_langs.append(lang_names[1])
+        lang_choose = lang_names.copy()
+        shuffle(lang_choose)
+        button_langs.append(lang_choose[0])
+        button_langs.append(lang_choose[1])
         button_langs.append(prop.actual_lang)
         shuffle(button_langs)
         prop.button_one_lang = button_langs[0]
@@ -87,10 +89,10 @@ def start_level(button_number):
             f.write(js)
         else:
             actaul_hs = highscr
-        highscore_canvas = Canvas(root, bg=bg_color, width=800, height=100, highlightthickness=0)
-        highscore_canvas.create_text(400, 50, text="Highscore", font=("Helvetica", 50), fill=text_color)
-        actual_hs_canvas = Canvas(root, bg=bg_color, width=800, height=120, highlightthickness=0)
+
+        highscore_canvas.pack()
         actual_hs_canvas.create_text(400, 70, font=("Helvetica", 80, "bold"), fill="blue", text=str(actaul_hs))
+        actual_hs_canvas.pack()
         button_restart.config(text="Restart")
         button_restart.pack()
 
@@ -162,11 +164,15 @@ def check_correct(button_number):
 
 def restart():
     button_restart.pack_forget()
+    highscore_canvas.pack_forget()
+    actual_hs_canvas.pack_forget()
     question_canvas.itemconfig(question, text="From which Language is")
     button_one.pack()
     button_two.pack()
     button_three.pack()
     prop.reset_prop(prop)
+    print(lang_names)
+    print(lang_keys)
     choose_lang()
 
 
@@ -193,6 +199,11 @@ actual_word_canvas = Canvas(root, bg=bg_color, width=800, height=120, highlightt
 word = actual_word_canvas.create_text(400, 70, font=("Helvetica", 80, "bold"), fill="blue")
 actual_word_canvas.pack()
 
+highscore_canvas = Canvas(root, bg=bg_color, width=800, height=100, highlightthickness=0)
+highscore_canvas.create_text(400, 50, text="Highscore", font=("Helvetica", 50), fill=text_color)
+
+actual_hs_canvas = Canvas(root, bg=bg_color, width=800, height=120, highlightthickness=0)
+
 button_one = Button(root, command=lambda : start_level(1), background=bg_color, activebackground=bg_color, foreground=prop.text_color_one, activeforeground=prop.text_color_one, font=("Helvetica", 60), highlightthickness=0, bd=0)
 button_one.pack()
 button_two = Button(root, command=lambda : start_level(2), background=bg_color, activebackground=bg_color, foreground=prop.text_color_two, activeforeground=prop.text_color_two, font=("Helvetica", 60), highlightthickness=0, bd=0)
@@ -201,5 +212,7 @@ button_three = Button(root, command=lambda : start_level(3), background=bg_color
 button_three.pack()
 button_restart = Button(root, command=lambda : restart(), background=bg_color, activebackground=bg_color, foreground=prop.text_color_three, activeforeground=prop.text_color_three, font=("Helvetica", 60), highlightthickness=0, bd=0)
 
+print(lang_names)
+print(lang_keys)
 choose_lang()
 root.mainloop()
