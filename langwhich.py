@@ -29,7 +29,6 @@ def translate_word(keys, languages):
         lang_entry.append(languages[x])
         lang_entry.append(words_to_translate[x])
         prop.information_lang.append(lang_entry)
-    print(prop.information_lang)
     start_level(0)
 
 def get_words():
@@ -171,8 +170,6 @@ def restart():
     button_two.pack()
     button_three.pack()
     prop.reset_prop(prop)
-    print(lang_names)
-    print(lang_keys)
     choose_lang()
 
 
@@ -212,7 +209,5 @@ button_three = Button(root, command=lambda : start_level(3), background=bg_color
 button_three.pack()
 button_restart = Button(root, command=lambda : restart(), background=bg_color, activebackground=bg_color, foreground=prop.text_color_three, activeforeground=prop.text_color_three, font=("Helvetica", 60), highlightthickness=0, bd=0)
 
-print(lang_names)
-print(lang_keys)
 choose_lang()
 root.mainloop()
